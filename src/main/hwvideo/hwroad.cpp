@@ -296,7 +296,7 @@ void HWRoad::render_foreground_lores(uint16_t* pixels)
     int x, y;
     uint16_t* roadram = ramBuff;
     
-    for (y = 0; y < S16_HEIGHT; y=y+2) 
+    for (y = 0; y < S16_HEIGHT; y=y+1) 
     {
         uint16_t color_table[32];
 
@@ -313,7 +313,7 @@ void HWRoad::render_foreground_lores(uint16_t* pixels)
         if (((data0 & 0x800) != 0) && ((data1 & 0x800) != 0))
             continue;
 
-        uint16_t* pPixel = pixels + ((y-1) * config.s16_width);
+        //uint16_t* pPixel = pixels + ((y-1) * config.s16_width);
         uint16_t* pPixel2 = pixels + (y * config.s16_width);
         int32_t hpos0, hpos1, color0, color1;
         int32_t control = road_control & 3;
@@ -360,7 +360,7 @@ void HWRoad::render_foreground_lores(uint16_t* pixels)
                 for (x = 0; x < config.s16_width; x++) 
                 {
                     int pix0 = (hpos0 < 0x200) ? src0[hpos0] : 3;
-                    pPixel[x] = color_table[0x00 + pix0];
+                    //pPixel[x] = color_table[0x00 + pix0];
                     pPixel2[x] = color_table[0x00 + pix0];
                     hpos0 = (hpos0 + 1) & 0xfff;
                 }
@@ -374,10 +374,10 @@ void HWRoad::render_foreground_lores(uint16_t* pixels)
                     int pix0 = (hpos0 < 0x200) ? src0[hpos0] : 3;
                     int pix1 = (hpos1 < 0x200) ? src1[hpos1] : 3;
                     if (((priority_map[0][pix0] >> pix1) & 1) != 0) {
-                        pPixel[x] = color_table[0x10 + pix1];
+                        //pPixel[x] = color_table[0x10 + pix1];
                         pPixel2[x] = color_table[0x10 + pix1];
                     } else {
-                        pPixel[x] = color_table[0x00 + pix0];
+                        //pPixel[x] = color_table[0x00 + pix0];
                         pPixel2[x] = color_table[0x00 + pix0];
                     }
                     hpos0 = (hpos0 + 1) & 0xfff;
@@ -393,10 +393,10 @@ void HWRoad::render_foreground_lores(uint16_t* pixels)
                     int pix0 = (hpos0 < 0x200) ? src0[hpos0] : 3;
                     int pix1 = (hpos1 < 0x200) ? src1[hpos1] : 3;
                     if (((priority_map[1][pix0] >> pix1) & 1) != 0) {
-                        pPixel[x] = color_table[0x10 + pix1];
+                        //pPixel[x] = color_table[0x10 + pix1];
                         pPixel2[x] = color_table[0x10 + pix1];
                     } else {
-                        pPixel[x] = color_table[0x00 + pix0];
+                        //pPixel[x] = color_table[0x00 + pix0];
                         pPixel2[x] = color_table[0x00 + pix0];
                     }
                     hpos0 = (hpos0 + 1) & 0xfff;
@@ -411,7 +411,7 @@ void HWRoad::render_foreground_lores(uint16_t* pixels)
                 for (x = 0; x < config.s16_width; x++) 
                 {
                     int pix1 = (hpos1 < 0x200) ? src1[hpos1] : 3;
-                    pPixel[x] = color_table[0x10 + pix1];
+                    //pPixel[x] = color_table[0x10 + pix1];
                     pPixel2[x] = color_table[0x10 + pix1];
                     hpos1 = (hpos1 + 1) & 0xfff;
                 }
@@ -421,7 +421,7 @@ void HWRoad::render_foreground_lores(uint16_t* pixels)
 }
 
 // ------------------------------------------------------------------------------------------------
-// High Resolution (Double Resolution) Road Rendering
+// High Resolution (float Resolution) Road Rendering
 // ------------------------------------------------------------------------------------------------
 void HWRoad::render_background_hires(uint16_t* pixels)
 {

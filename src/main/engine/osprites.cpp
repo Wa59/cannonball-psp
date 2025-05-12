@@ -34,6 +34,7 @@ OSprites::~OSprites(void)
 
 void OSprites::init()
 {
+
     // Set activated number of sprites based on config
     no_sprites = config.engine.level_objects ? SPRITE_ENTRIES : 0x4F;
 

@@ -139,20 +139,23 @@ void hwsprites::swap()
     }
 }
 
-#define draw_pixel()                                                                                  \
-{                                                                                                     \
-    if (x >= x1 && x < x2 && pix != 0 && pix != 15)                                                   \
-    {                                                                                                 \
-        if (shadow && pix == 0xa)                                                                     \
-        {                                                                                             \
-            pPixel[x] &= 0xfff;                                                                       \
-            pPixel[x] += ((S16_PALETTE_ENTRIES * 2) - ((video.read_pal16(pPixel[x]) & 0x8000) >> 3)); \
-        }                                                                                             \
-        else                                                                                          \
-        {                                                                                             \
-            pPixel[x] = (pix | color);                                                                \
-        }                                                                                             \
-    }                                                                                                 \
+#define draw_pixel()                                                                                     \
+{                                                                                                        \
+    if ((uint32_t)(x - x1) < (uint32_t)(x2 - x1) && pix > 0 && pix != 15)                                \
+    {                                                                                                    \
+        uint16_t *px = &pPixel[x];                                                                       \
+        if (shadow && pix == 0xA)                                                                        \
+        {                                                                                                \
+            uint16_t val = *px & 0x0FFF;                                                                 \
+            uint16_t pal = video.read_pal16(val);                                                        \
+            val += ((S16_PALETTE_ENTRIES * 2) - ((pal & 0x8000) >> 3));                                  \
+            *px = val;                                                                                   \
+        }                                                                                                \
+        else                                                                                             \
+        {                                                                                                \
+            *px = (pix | color);                                                                         \
+        }                                                                                                \
+    }                                                                                                    \
 }
 
 void hwsprites::render(const uint8_t priority)
@@ -209,18 +212,6 @@ void hwsprites::render(const uint8_t priority)
         // loop from top to bottom
         ytarget = top + ydelta * height;
 
-        // Adjust for widescreen mode
-        xpos += config.s16_x_off;
-
-        // Adjust for hi-res mode
-        if (config.video.hires)
-        {
-            xpos <<= 1;
-            top <<= 1;
-            ytarget <<= 1;
-            hzoom >>= 1;
-            vzoom >>= 1;
-        }
 
         for (y = top; y != ytarget; y += ydelta)
         {

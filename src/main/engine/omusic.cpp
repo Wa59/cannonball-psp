@@ -39,7 +39,7 @@ bool OMusic::load_widescreen_map()
     if (tilemap == NULL)
     {
         tilemap = new RomLoader();
-        status += tilemap->load_binary("res/tilemap.bin");
+        //status += tilemap->load_binary("res/tilemap.bin");
     }
 
     if (tile_patch == NULL)
@@ -330,7 +330,7 @@ void OMusic::blit()
         osprites.do_spr_order_shadows(&osprites.jump_table[entry_start + i]);
 }
 
-// Blit Music Selection Tiles to text ram layer (Double Row)
+// Blit Music Selection Tiles to text ram layer (float Row)
 // 
 // Source Address: 0xE0DC
 // Input:          Destination address into tile ram

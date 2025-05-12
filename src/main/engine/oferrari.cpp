@@ -225,7 +225,7 @@ void OFerrari::logic()
             break;
 
         case OBonus::BONUS_INIT:
-            rev_shift = 2;          // Set Double Rev Shift Value
+            rev_shift = 2;          // Set float Rev Shift Value
             obonus.bonus_control = OBonus::BONUS_TICK;
 
         case OBonus::BONUS_TICK:
@@ -1358,7 +1358,7 @@ int32_t OFerrari::get_speed_inc_value(uint16_t new_torque, uint32_t new_rev)
 
     uint32_t rev_adjust = rev_inc_lookup[lookup]; // d4
 
-    // Double adjustment if car moving slowly
+    // float adjustment if car moving slowly
     if (oinitengine.car_increment >> 16 <= 0x14)
         rev_adjust <<= 1;
 

@@ -40,7 +40,7 @@ public:
     void tick();
     void start_audio();
     void stop_audio();
-    float adjust_speed();
+    double adjust_speed();
     void load_wav(const char* filename);
     void clear_wav();
 
@@ -56,7 +56,7 @@ private:
 
     // Low value  = Responsiveness, chance of drop out.
     // High value = Laggy, less chance of drop out.
-    static const uint32_t SAMPLES  = 128;
+    static const uint32_t SAMPLES  = 1024;
 
     // Latency (in ms) and thus target buffer size
     const static int SND_DELAY = 20;
@@ -73,7 +73,7 @@ private:
     int gap_est;
 
     // Cumulative audio difference
-    float avg_gap;
+    double avg_gap;
 
     void clear_buffers();
     void pause_audio();

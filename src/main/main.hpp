@@ -23,7 +23,7 @@ namespace cannonball
     extern bool tick_frame;
 
     // Millisecond Time Per Frame
-    extern double frame_ms;
+    extern float frame_ms;
 
     // FPS Counter
     extern int fps_counter;

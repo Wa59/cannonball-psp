@@ -74,7 +74,7 @@ PSP_MAIN_THREAD_ATTR(THREAD_ATTR_USER | THREAD_ATTR_VFPU);
 using namespace cannonball;
 
 int    cannonball::state       = STATE_BOOT;
-double cannonball::frame_ms    = 0;
+float cannonball::frame_ms    = 0;
 int    cannonball::frame       = 0;
 bool   cannonball::tick_frame  = true;
 int    cannonball::fps_counter = 0;
@@ -143,8 +143,8 @@ static void process_events(void)
     
     SceCtrlData pad;
 
-	sceCtrlSetSamplingCycle(0);
-	sceCtrlSetSamplingMode(PSP_CTRL_MODE_ANALOG);
+	sceCtrlSetSamplingCycle(30);
+	sceCtrlSetSamplingMode(PSP_CTRL_MODE_DIGITAL);
     		
     sceCtrlReadBufferPositive(&pad, 1); 
 
@@ -158,6 +158,12 @@ static void process_events(void)
         input.psp_handle_key(6);
     } else {
         input.psp_handle_release(6);
+    }
+
+    if (pad.Buttons & PSP_CTRL_CIRCLE) {
+        input.psp_handle_key(7);
+    } else {
+        input.psp_handle_release(7);
     }
 
     if (pad.Buttons & PSP_CTRL_SQUARE) {
@@ -206,6 +212,12 @@ static void process_events(void)
         input.psp_handle_key(9);
 	} else {
         input.psp_handle_release(9);
+    }    
+
+    if (pad.Buttons & PSP_CTRL_LTRIGGER){
+        input.psp_handle_key(10);
+    } else {
+        input.psp_handle_release(10);
     }
   
 }
@@ -298,50 +310,28 @@ static void tick()
 
     // Draw SDL Video
     video.draw_frame();  
-}
+   }
 
 static void main_loop()
 {
-    // FPS Counter (If Enabled)
-    Timer fps_count;
-    int frame = 0;
-    fps_count.start();
-
     // General Frame Timing
     Timer frame_time;
     int t;
-    double deltatime  = 0;
+    float deltatime  = 0;
     int deltaintegral = 0;
 
     while (isRunning())//state != STATE_QUIT)
     {
         if(state == STATE_QUIT)
             quit_func(0);
-        frame_time.start();
-        tick();
-        #ifdef COMPILE_SOUND_CODE
-        deltatime += (frame_ms * audio.adjust_speed());
-        #else
-        deltatime += frame_ms;
-        #endif
-        deltaintegral  = (int) deltatime;
-        t = frame_time.get_ticks();
 
-        // Cap Frame Rate: Sleep Remaining Frame Time
-        if (t < deltatime)
-        {
-            SDL_Delay((Uint32) (deltatime - t));
-        }
-        
+        tick();
+
+        deltatime += frame_ms;
+        deltaintegral  = (int) deltatime;
+        t = frame_time.get_ticks();    
         deltatime -= deltaintegral;
-        frame++;
-        // One second has elapsed
-        if (fps_count.get_ticks() >= 1000)
-        {
-            fps_counter = frame;
-            frame       = 0;
-            fps_count.start();
-        }
+           
     }
 
     quit_func(0);
@@ -383,13 +373,10 @@ int main(int argc, char* argv[])
 		//config.init();
         config.load(FILENAME_CONFIG);
 
-        // Load fixed PCM ROM based on config
-        if (config.sound.fix_samples)
-            roms.load_pcm_rom(true);
-
         // Load patched widescreen tilemaps
-        if (!omusic.load_widescreen_map())
+        if (!omusic.load_widescreen_map()) {
             std::cout << "Unable to load widescreen tilemaps" << std::endl;
+        }
 
 #ifndef SDL2
         //Set the window caption 
@@ -401,7 +388,7 @@ int main(int argc, char* argv[])
             quit_func(1);
 
 #ifdef COMPILE_SOUND_CODE
-        //audio.init();
+        audio.init();
 #endif
         state = config.menu.enabled ? STATE_INIT_MENU : STATE_INIT_GAME;
 

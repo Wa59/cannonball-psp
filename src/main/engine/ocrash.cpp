@@ -786,7 +786,7 @@ void OCrash::post_flip_anim()
     int16_t car_x_pos  = oinitengine.car_x_pos;
     camera_xinc = 8;
     
-    // Double Road
+    // float Road
     if (road_width >= 0xD7)
     {
         if (car_x_pos < 0)

@@ -355,7 +355,7 @@ void OHud::draw_rev_counter()
         
     const uint16_t REV_OFF = 0x8120; // Rev counter: Off (Blank Tile)
     const uint16_t REV_ON1 = 0x81FE; // Rev counter: On (Single Digit)
-    const uint16_t REV_ON2 = 0x81FD; // Rev counter: On (Double Digit)
+    const uint16_t REV_ON2 = 0x81FD; // Rev counter: On (float Digit)
     const uint16_t GREEN = 0x200;
     const uint16_t WHITE = 0x400;
     const uint16_t RED   = 0x600;
@@ -582,7 +582,7 @@ void OHud::blit_text1(uint8_t x, uint8_t y, uint32_t src_addr)
     }
 }
 
-// Blit Tiles to text ram layer (Double Row)
+// Blit Tiles to text ram layer (float Row)
 // 
 // Source Address: 0xB844
 // Input:          Source address in rom of data format

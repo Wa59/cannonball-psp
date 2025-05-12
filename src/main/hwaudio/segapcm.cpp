@@ -87,7 +87,7 @@ SegaPCM::~SegaPCM()
 void SegaPCM::init(int32_t fps)
 {
     int FREQ = 44100;
-    downsample = (32000.0 / (double) FREQ);
+    downsample = (32000.0 / (float) FREQ);
     SoundChip::init(STEREO, FREQ, fps);
 }
 

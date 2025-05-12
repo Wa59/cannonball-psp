@@ -321,6 +321,7 @@ void Outrun::main_switch()
         // ----------------------------------------------------------------------------------------
         case GS_ATTRACT:
             tick_attract();
+            cannonball::audio.clear_wav();
             break;
 
         case GS_INIT_BEST1:

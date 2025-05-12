@@ -20,7 +20,7 @@ X More cars seem to be high pitched than on MAME. (Fixed - engine channel setup)
 #include "engine/audio/osound.hpp"
 
 // Use YM2151 Timing
-#define TIMER_CODE 1
+#define TIMER_CODE 0
 
 // Enable Unused code block warnings
 //#define UNUSED_WARNINGS 1
@@ -59,7 +59,7 @@ void OSound::init(YM2151* ym, uint8_t* pcm_ram)
     for (int8_t i = 0; i < 16; i++)
         pcm_ram[0x86 + (i * 8)] = 1; // Channel Active
 
-    init_fm_chip();
+    //init_fm_chip();
 }
 
 // Initialize FM Chip. Initalize and start Timer A.
@@ -77,11 +77,11 @@ void OSound::init_fm_chip()
 
 void OSound::tick()
 {
-    fm_dotimera();          // FM: Process Timer A. Stop Timer B
+    //fm_dotimera();          // FM: Process Timer A. Stop Timer B
     process_command();      // Process Command sent by main program code (originally the main 68k processor)
     process_channels();     // Run logic on individual sound channel (both YM & PCM channels)
     engine_process();       // Ferrari Engine Tone & Traffic Noise
-    traffic_process();      // Traffic Volume/Panning & Pitch
+    //traffic_process();      // Traffic Volume/Panning & Pitch
 }
 
 // PCM RAM Read/Write Helper Functions
@@ -136,33 +136,33 @@ void OSound::process_command()
             case sound::MUSIC_BREEZE:
                 sound_props |= BIT_0; // Trigger rev effect
             case sound::MUSIC_BREEZE2:
-                cmd = sound::MUSIC_BREEZE;
-                fm_reset();
-                init_sound(cmd, DATA_BREEZE, channel::YM1);
+                //cmd = sound::MUSIC_BREEZE;
+                //fm_reset();
+                //init_sound(cmd, DATA_BREEZE, channel::YM1);
                 break;
 
             case sound::MUSIC_SPLASH:
                 sound_props |= BIT_0; // Trigger rev effect
             case sound::MUSIC_SPLASH2:
-                cmd = sound::MUSIC_SPLASH;
-                fm_reset();
-                init_sound(cmd, DATA_SPLASH, channel::YM1);
+                //cmd = sound::MUSIC_SPLASH;
+                //fm_reset();
+                //init_sound(cmd, DATA_SPLASH, channel::YM1);
                 break;
 
             case sound::COIN_IN:
-                init_sound(cmd, DATA_COININ, channel::YM_FX1);
+                //init_sound(cmd, DATA_COININ, channel::YM_FX1);
                 break;
 
             case sound::MUSIC_MAGICAL:
                 sound_props |= BIT_0; // Trigger rev effect
             case sound::MUSIC_MAGICAL2:
-                cmd = sound::MUSIC_MAGICAL;
-                fm_reset();
-                init_sound(cmd, DATA_MAGICAL, channel::YM1);
+                //cmd = sound::MUSIC_MAGICAL;
+                //fm_reset();
+                //init_sound(cmd, DATA_MAGICAL, channel::YM1);
                 break;
 
             case sound::YM_CHECKPOINT:
-                init_sound(cmd, DATA_CHECKPOINT, channel::YM_FX1);
+                //init_sound(cmd, DATA_CHECKPOINT, channel::YM_FX1);
                 break;
 
             case sound::INIT_SLIP:
@@ -170,14 +170,14 @@ void OSound::process_command()
                 break;
 
             case sound::INIT_CHEERS:
-                init_sound(cmd, DATA_CHEERS, channel::PCM_FX1);
+                //init_sound(cmd, DATA_CHEERS, channel::PCM_FX1);
                 break;
 
             case sound::STOP_CHEERS:
-                chan_ram[channel::PCM_FX1] = 0;
-                chan_ram[channel::PCM_FX2] = 0;
-                pcm_w(0xF08E, 1); // Set inactive flag on channels
-                pcm_w(0xF09E, 1);
+                //chan_ram[channel::PCM_FX1] = 0;
+                //chan_ram[channel::PCM_FX2] = 0;
+                //pcm_w(0xF08E, 1); // Set inactive flag on channels
+                //pcm_w(0xF09E, 1);
                 break;
 
             case sound::CRASH1:
@@ -185,7 +185,7 @@ void OSound::process_command()
                 break;
 
             case sound::REBOUND:
-                init_sound(cmd, DATA_REBOUND, channel::PCM_FX5);
+                //init_sound(cmd, DATA_REBOUND, channel::PCM_FX5);
                 break;
 
             case sound::CRASH2:
@@ -197,46 +197,46 @@ void OSound::process_command()
                 break;
 
             case sound::SIGNAL1:
-                init_sound(cmd, DATA_SIGNAL1, channel::YM_FX1);
+                //init_sound(cmd, DATA_SIGNAL1, channel::YM_FX1);
                 break;
 
             case sound::SIGNAL2:
-                sound_props &= ~BIT_0; // Clear rev effect
-                init_sound(cmd, DATA_SIGNAL2, channel::YM_FX1);
+                //sound_props &= ~BIT_0; // Clear rev effect
+                //init_sound(cmd, DATA_SIGNAL2, channel::YM_FX1);
                 break;
 
             case sound::INIT_WEIRD:
-                init_sound(cmd, DATA_WEIRD, channel::PCM_FX5);
+                //init_sound(cmd, DATA_WEIRD, channel::PCM_FX5);
                 break;
 
             case sound::STOP_WEIRD:
-                chan_ram[channel::PCM_FX5] = 0;
-                chan_ram[channel::PCM_FX6] = 0;
-                pcm_w(0xF0CE, 1); // Set inactive flag on channels
-                pcm_w(0xF0DE, 1);
+                //chan_ram[channel::PCM_FX5] = 0;
+                //chan_ram[channel::PCM_FX6] = 0;
+                //pcm_w(0xF0CE, 1); // Set inactive flag on channels
+                //pcm_w(0xF0DE, 1);
                 break;
 
             case sound::REVS:
-                fm_reset();
-                sound_props |= BIT_0; // Trigger rev effect
+                //fm_reset();
+                //sound_props |= BIT_0; // Trigger rev effect
                 break;
 
             case sound::BEEP1:
-                init_sound(cmd, DATA_BEEP1, channel::YM_FX1);
+                //init_sound(cmd, DATA_BEEP1, channel::YM_FX1);
                 break;
 
             case sound::UFO:
-                fm_reset();
-                init_sound(cmd, DATA_UFO, channel::YM_FX1);
+                //fm_reset();
+                //init_sound(cmd, DATA_UFO, channel::YM_FX1);
                 break;
 
             case sound::BEEP2:
-                fm_reset();
-                init_sound(cmd, DATA_BEEP2, channel::YM1);
+                //fm_reset();
+                //init_sound(cmd, DATA_BEEP2, channel::YM1);
                 break;
 
             case sound::INIT_CHEERS2:
-                init_sound(cmd, DATA_CHEERS2, channel::PCM_FX1);
+                //init_sound(cmd, DATA_CHEERS2, channel::PCM_FX1);
                 break;
 
             case sound::VOICE_CHECKPOINT:
@@ -267,15 +267,15 @@ void OSound::process_command()
                 break;
 
             case sound::YM_SET_LEVELS:
-                ym_set_levels();
+                //ym_set_levels();
                 break;
 
             case sound::PCM_WAVE:
-                init_sound(cmd, DATA_WAVE, channel::PCM_FX1);
+                //init_sound(cmd, DATA_WAVE, channel::PCM_FX1);
                 break;
 
             case sound::MUSIC_LASTWAVE:
-                init_sound(cmd, DATA_LASTWAVE, channel::YM1);
+                //init_sound(cmd, DATA_LASTWAVE, channel::YM1);
                 break;
 
             #ifdef UNUSED_WARNINGS
@@ -570,23 +570,23 @@ void OSound::do_command(uint8_t* chan, uint8_t cmd)
             break;
 
         case 0x04:
-            ym_finalize(chan);
+            //ym_finalize(chan);
             return;
 
         // YM: Enable/Disable Modulation table
         case 0x07:
-            chan[ch::FM_PHASETBL] = roms.z80.read8(pos);
+            //chan[ch::FM_PHASETBL] = roms.z80.read8(pos);
             break;
 
         // Write Sequence Address (Used by PCM Drum Samples)
         case 0x08:
-            write_seq_adr(chan);
+            //write_seq_adr(chan);
             break;
 
         // Set Next Sequence Address [pos] (Used by PCM Drum Samples)
         case 0x09:
-            pos = r16(&chan[chan[ch::MEM_OFFSET]]);
-            chan[ch::MEM_OFFSET] += 2;
+            //pos = r16(&chan[chan[ch::MEM_OFFSET]]);
+            //chan[ch::MEM_OFFSET] += 2;
             break;
 
         case 0x0A:
@@ -595,7 +595,7 @@ void OSound::do_command(uint8_t* chan, uint8_t cmd)
 
         // YM: Set Note/Octave Offset
         case 0x0B:
-            chan[ch::NOTE_OFFSET] += roms.z80.read8(pos);
+            //chan[ch::NOTE_OFFSET] += roms.z80.read8(pos);
             break;
 
         case 0x0C:
@@ -603,7 +603,7 @@ void OSound::do_command(uint8_t* chan, uint8_t cmd)
             break;
 
         case 0x11:
-            ym_set_block(chan);
+            //ym_set_block(chan);
             break;
 
         case 0x13:
@@ -1292,9 +1292,10 @@ void OSound::engine_process()
     // engine_data[sound::ENGINE_PITCH_L] = 0xF1;
     // engine_data[sound::ENGINE_VOL]     = 0x3F;
     // END DEBUG
+    engine_counter++;
 
     // Return 1 in 2 times when this routine is called
-    if ((++engine_counter & 1) == 0)
+    if ((engine_counter & (1024 - 1)) == 0)
         return;
 
     uint16_t ix = 0;                    // PCM Channel RAM Address
@@ -1327,6 +1328,7 @@ void OSound::engine_process_chan(uint8_t* chan, uint8_t* pcm)
     // ------------------------------------------------------------------------
     if (sound_props & BIT_0)
     {
+        /*
         // 0x7663
         uint16_t revs = r16(pcm); // Read Revs/Pitch which has just been stored by engine_read_data
 
@@ -1373,6 +1375,7 @@ void OSound::engine_process_chan(uint8_t* chan, uint8_t* pcm)
             return;
         }
         // Some code relating to 0xFD08 that I don't think is used
+        */
     }
     // 0x754A
     if (engine_channel & BIT_0)
@@ -1484,8 +1487,8 @@ void OSound::engine_process_chan(uint8_t* chan, uint8_t* pcm)
         engine_set_adr_end(engine_pos, start_adr, chan, pcm);       // Set End Address
     }
 
-    vol_thicken(engine_pos, chan, pcm); // Thicken engine effect by panning left/right dependent on channel.
-    engine_set_pitch(engine_pos, pcm);  // Set Engine Pitch from lookup table specified by hl
+    //vol_thicken(engine_pos, chan, pcm); // Thicken engine effect by panning left/right dependent on channel.
+    //engine_set_pitch(engine_pos, pcm);  // Set Engine Pitch from lookup table specified by hl
     pcm[0x86] = 0;                      // Set Active & Loop Enabled
 }
 
@@ -1560,6 +1563,10 @@ void OSound::ferrari_vol_pan(uint8_t* chan, uint8_t* pcm)
     pos = ENGINE_ADR_TABLE + 4; // Set position to pitch offset
     uint16_t pitch = roms.z80.read8(pos); // bc
     pitch += r16(chan + ch_engines::PITCH_L) >> 1;
+    if (pitch < 0x50) {
+        engine_mute_channel(chan, pcm, false);
+        return;
+    };
     if (pitch > 0xFF) pitch = 0xFF;
 
     // Tweak pitch slightly based on channel id

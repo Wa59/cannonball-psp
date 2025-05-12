@@ -137,10 +137,10 @@ void Menu::populate()
     menu_main.push_back(ENTRY_GAMEMODES);
     menu_main.push_back(ENTRY_SETTINGS);
     menu_main.push_back(ENTRY_ABOUT);
-    menu_main.push_back(ENTRY_EXIT);
+    //menu_main.push_back(ENTRY_EXIT);
 
-    menu_gamemodes.push_back(ENTRY_ENHANCED);
-    menu_gamemodes.push_back(ENTRY_ORIGINAL);
+    //menu_gamemodes.push_back(ENTRY_ENHANCED);
+    //menu_gamemodes.push_back(ENTRY_ORIGINAL);
     menu_gamemodes.push_back(ENTRY_CONT);
     menu_gamemodes.push_back(ENTRY_TIMETRIAL);
     menu_gamemodes.push_back(ENTRY_BACK);
@@ -154,7 +154,7 @@ void Menu::populate()
     menu_timetrial.push_back(ENTRY_TRAFFIC);
     menu_timetrial.push_back(ENTRY_BACK);
 
-    menu_settings.push_back(ENTRY_VIDEO);
+    //menu_settings.push_back(ENTRY_VIDEO);
     #ifdef COMPILE_SOUND_CODE
     menu_settings.push_back(ENTRY_SOUND);
     #endif
@@ -184,14 +184,14 @@ void Menu::populate()
     //menu_sound.push_back(ENTRY_SFX);
     menu_sound.push_back(ENTRY_ADVERTISE);
     menu_sound.push_back(ENTRY_PREVIEWSND);
-    menu_sound.push_back(ENTRY_FIXSAMPLES);
-    menu_sound.push_back(ENTRY_MUSICTEST);
+    //menu_sound.push_back(ENTRY_FIXSAMPLES);
+    //menu_sound.push_back(ENTRY_MUSICTEST);
     menu_sound.push_back(ENTRY_BACK);
 
     menu_controls.push_back(ENTRY_GEAR);
-    if (input.gamepad) menu_controls.push_back(ENTRY_ANALOG);
-    menu_controls.push_back(ENTRY_REDEFKEY);
-    if (input.gamepad) menu_controls.push_back(ENTRY_REDEFJOY);
+    //if (input.gamepad) menu_controls.push_back(ENTRY_ANALOG);
+    //menu_controls.push_back(ENTRY_REDEFKEY);
+    //if (input.gamepad) menu_controls.push_back(ENTRY_REDEFJOY);
     menu_controls.push_back(ENTRY_DSTEER);
     menu_controls.push_back(ENTRY_DPEDAL);
     menu_controls.push_back(ENTRY_BACK);
@@ -212,7 +212,7 @@ void Menu::populate()
 
     menu_about.push_back("CANNONBALL 0.3 © CHRIS WHITE 2014");
     menu_about.push_back("REASSEMBLER.BLOGSPOT.COM");
-    menu_about.push_back(" ");
+    menu_about.push_back("PORTED TO PSP BY WA59");
     menu_about.push_back("CANNONBALL IS FREE AND MAY NOT BE SOLD.");
 
     // Redefine menu text

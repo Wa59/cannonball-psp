@@ -193,7 +193,7 @@ void Audio::tick()
 {
     int bytes_written = 0;
     int newpos;
-    double bytes_per_ms;
+    float bytes_per_ms;
 
     if (!sound_enabled) return;
 
@@ -282,12 +282,12 @@ void Audio::tick()
 
 // Adjust the speed of the emulator, based on audio streaming performance.
 // This ensures that we avoid pops and crackles (in theory). 
-double Audio::adjust_speed()
+float Audio::adjust_speed()
 {
     if (!sound_enabled)
         return 1.0;
 
-    double alpha = 2.0 / (1.0+40.0);
+    float alpha = 2.0 / (1.0+40.0);
     int gap_too_small;
     int gap_too_large;
     bool inited = false;
@@ -307,12 +307,12 @@ double Audio::adjust_speed()
     
     if (avg_gap < gap_too_small) 
     {
-        double speed = 0.9;
+        float speed = 0.9;
         return speed;
     }
     if (avg_gap > gap_too_large)
     {
-        double speed = 1.1;
+        float speed = 1.1;
         return speed;
     }
     return 1.0;

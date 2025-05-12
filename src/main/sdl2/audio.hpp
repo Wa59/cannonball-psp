@@ -41,7 +41,7 @@ public:
     void tick();
     void start_audio();
     void stop_audio();
-    double adjust_speed();
+    float adjust_speed();
     void load_wav(const char* filename);
     void clear_wav();
 
@@ -74,7 +74,7 @@ private:
     int gap_est;
 
     // Cumulative audio difference
-    double avg_gap;
+    float avg_gap;
 
     void clear_buffers();
     void pause_audio();

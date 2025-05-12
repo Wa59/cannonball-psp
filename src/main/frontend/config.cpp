@@ -91,21 +91,24 @@ void Config::load(const std::string &filename)
     // Sound Settings
     // ------------------------------------------------------------------------
     sound.enabled     = pt_config.get("sound.enable",      1);
-    sound.advertise   = pt_config.get("sound.advertise",   1);
-    sound.preview     = pt_config.get("sound.preview",     1);
+    sound.advertise   = pt_config.get("sound.advertise",   0);
+    sound.preview     = pt_config.get("sound.preview",     0);
     sound.fix_samples = pt_config.get("sound.fix_samples", 0);
 
     // Custom Music
-    for (int i = 0; i < 4; i++)
-    {
-        std::string xmltag = "sound.custom_music.track";
-        xmltag += Utils::to_string(i+1);  
+    //*
+    sound.custom_music[0].enabled = 1;
+    sound.custom_music[0].title   = "MAGICAL SOUND SHOWER";
+    sound.custom_music[0].filename= "res/1.wav";
 
-        sound.custom_music[i].enabled = pt_config.get(xmltag + ".<xmlattr>.enabled", 0);
-        sound.custom_music[i].title   = pt_config.get(xmltag + ".title", "TRACK " +Utils::to_string(i+1));
-        sound.custom_music[i].filename= pt_config.get(xmltag + ".filename", "track"+Utils::to_string(i+1)+".wav");
-    }
+    sound.custom_music[1].enabled = 1;
+    sound.custom_music[1].title   = "PASSING BREEZE";
+    sound.custom_music[1].filename= "res/2.wav";
 
+    sound.custom_music[2].enabled = 1;
+    sound.custom_music[2].title   = "SPLASH WAVE";
+    sound.custom_music[2].filename= "res/3.wav";
+    //*/
     // ------------------------------------------------------------------------
     // CannonBoard Settings
     // ------------------------------------------------------------------------
@@ -167,7 +170,7 @@ void Config::load(const std::string &filename)
     engine.dip_time    &= 3;
     engine.dip_traffic &= 3;
 
-    engine.freeplay      = pt_config.get("engine.freeplay",        1) != 0;
+    engine.freeplay      = pt_config.get("engine.freeplay",        0) != 0;
     engine.jap           = pt_config.get("engine.japanese_tracks", 0);
     engine.prototype     = pt_config.get("engine.prototype",       0);
     
@@ -175,7 +178,7 @@ void Config::load(const std::string &filename)
     engine.level_objects   = pt_config.get("engine.levelobjects", 0);
     engine.randomgen       = pt_config.get("engine.randomgen",    1);
     engine.fix_bugs_backup = 
-    engine.fix_bugs        = pt_config.get("engine.fix_bugs",     1) != 0;
+    engine.fix_bugs        = pt_config.get("engine.fix_bugs",     0) != 0;
     engine.fix_timer       = pt_config.get("engine.fix_timer",    0) != 0;
     engine.layout_debug    = pt_config.get("engine.layout_debug", 0) != 0;
     engine.new_attract     = pt_config.get("engine.new_attract", 1) != 0;
@@ -247,7 +250,7 @@ bool Config::save(const std::string &filename)
 
     try
     {
-        write_xml(filename, pt_config, std::locale(), xml_writer_settings('\t', 1)); // Tab space 1
+        //write_xml(filename, pt_config, std::locale(), xml_writer_settings('\t', 1)); // Tab space 1
     }
     catch (std::exception &e)
     {
@@ -296,6 +299,7 @@ void Config::load_scores(const std::string &filename)
 void Config::save_scores(const std::string &filename)
 {
     // Create empty property tree object
+    /*
     ptree pt;
         
     for (int i = 0; i < ohiscore.NO_SCORES; i++)
@@ -321,6 +325,7 @@ void Config::save_scores(const std::string &filename)
     {
         std::cout << "Error saving hiscores: " << e.what() << "\n";
     }
+    */
 }
 
 void Config::load_tiletrial_scores()
@@ -399,10 +404,10 @@ void Config::set_fps(int fps)
 {
     video.fps = fps;
     // Set core FPS to 30fps or 60fps
-    this->fps = video.fps == 0 ? 30 : 60;
+    this->fps = 30;
     
     // Original game ticks sprites at 30fps but background scroll at 60fps
-    tick_fps  = video.fps < 2 ? 30 : 60;
+    tick_fps  = 30;
 
     cannonball::frame_ms = 1000.0 / this->fps;
 

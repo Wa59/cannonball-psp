@@ -20,17 +20,6 @@
 #include "frontend/config.hpp" // fps
 #include "engine/audio/osoundint.hpp"
 
-#include <pspkernel.h>
-#include <pspdisplay.h>
-#include <pspdebug.h>
-#include <pspctrl.h>
-
-#include <pspgu.h>
-#include <pspgum.h>
-#include <pspge.h>
-
-#define printf pspDebugScreenPrintf
-
 #include <cstring>
 
 #ifdef COMPILE_SOUND_CODE
@@ -81,7 +70,7 @@ void Audio::start_audio()
         // SDL Audio Properties
         SDL_AudioSpec desired, obtained;
 
-        desired.freq     = FREQ;
+        desired.freq     = 11025;
         desired.format   = AUDIO_S16SYS;
         desired.channels = CHANNELS;
         desired.samples  = SAMPLES;
@@ -150,6 +139,9 @@ void Audio::stop_audio()
         SDL_PauseAudio(1);
         SDL_CloseAudio();
 
+        clear_buffers();
+        clear_wav();
+
         delete[] dsp_buffer;
         delete[] mix_buffer;
     }
@@ -177,17 +169,17 @@ void Audio::tick()
 {
     int bytes_written = 0;
     int newpos;
-    float bytes_per_ms;
+    double bytes_per_ms;
 
     if (!sound_enabled) return;
 
     // Update audio streams from PCM & YM Devices
     osoundint.pcm->stream_update();
-    osoundint.ym->stream_update();
+    //osoundint.ym->stream_update();
 
     // Get the audio buffers we've just output
     int16_t *pcm_buffer = osoundint.pcm->get_buffer();
-    int16_t *ym_buffer  = osoundint.ym->get_buffer();
+    //int16_t *ym_buffer  = osoundint.ym->get_buffer();
     int16_t *wav_buffer = wavfile.data;
 
     int samples_written = osoundint.pcm->buffer_size;
@@ -195,7 +187,7 @@ void Audio::tick()
     // And mix them into the mix_buffer
     for (int i = 0; i < samples_written; i++)
     {
-        int32_t mix_data = wav_buffer[wavfile.pos] + pcm_buffer[i] + ym_buffer[i];
+        int32_t mix_data = wav_buffer[wavfile.pos] + pcm_buffer[i];
 
         // Clip mix data
         if (mix_data >= (1 << 15))
@@ -214,7 +206,7 @@ void Audio::tick()
     uint8_t* mbuf8 = (uint8_t*) mix_buffer;
 
     // produce samples from the sound emulation
-    bytes_per_ms = (bytes_per_sample) * (FREQ/1000.0);
+    bytes_per_ms = (bytes_per_sample) * (11025/1000.0);
     bytes_written = (BITS == 8 ? samples_written : samples_written*2);
     
     SDL_LockAudio();
@@ -266,12 +258,12 @@ void Audio::tick()
 
 // Adjust the speed of the emulator, based on audio streaming performance.
 // This ensures that we avoid pops and crackles (in theory). 
-float Audio::adjust_speed()
+double Audio::adjust_speed()
 {
     if (!sound_enabled)
         return 1.0;
 
-    float alpha = 2.0 / (1.0+40.0);
+    double alpha = 2.0 / (1.0+40.0);
     int gap_too_small;
     int gap_too_large;
     bool inited = false;
@@ -291,12 +283,12 @@ float Audio::adjust_speed()
     
     if (avg_gap < gap_too_small) 
     {
-        float speed = 0.9;
+        double speed = 0.9;
         return speed;
     }
     if (avg_gap > gap_too_large)
     {
-        float speed = 1.1;
+        double speed = 1.1;
         return speed;
     }
     return 1.0;

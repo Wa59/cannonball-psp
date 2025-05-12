@@ -41,32 +41,23 @@ bool RenderSW::init(int src_width, int src_height,
     if (!RenderBase::sdl_screen_size())
         return false;
 
-    int flags = SDL_FLAGS;
+    SDL_ShowCursor(0);
 
     //this->video_mode = video_settings_t::MODE_WINDOW;
    
-    scale_factor  = scale;
-
-    scn_width  = src_width  * scale_factor;
-    scn_height = src_height * scale_factor;
+    scn_width  = src_width = 320;
+    scn_height = src_height = 224;
 
     // As we're windowed this is just the same
-    dst_width  = 480;
-    dst_height = 272;
-    
-    screen_xoff = 0;
-    screen_yoff = 0;
-
     //int bpp = info->vfmt->BitsPerPixel;
     const int bpp = 32;
-    const int available = SDL_VideoModeOK(scn_width, scn_height, bpp, flags);
 
     // Frees (Deletes) existing surface
     if (surface)
         SDL_FreeSurface(surface);
 
     // Set the video mode
-    surface = SDL_SetVideoMode(scn_width, scn_height, bpp, SDL_HWPALETTE);
+    surface = SDL_SetVideoMode(320, 224, bpp, SDL_SWSURFACE | SDL_HWPALETTE | SDL_FULLSCREEN);
 
 
     // Convert the SDL pixel surface to 32 bit.
@@ -83,7 +74,7 @@ bool RenderSW::init(int src_width, int src_height,
 
     if (pix)
         delete[] pix;
-    pix = new uint32_t[src_width * src_height];
+    pix = new uint32_t[320 * 224];
 
     return true;
 }
@@ -110,57 +101,19 @@ bool RenderSW::finalize_frame()
 
 void RenderSW::draw_frame(uint16_t* pixels)
 {
-    // Do Scaling
-    if (scale_factor != 1)
-    {
-        uint32_t* pixx = pix;
+    uint32_t* spix = screen_pixels;
 
-        // Lookup real RGB value from rgb array for backbuffer
-        for (int i = 0; i < (src_width * src_height); i++)
-            *(pixx++) = rgb[*(pixels++) & ((S16_PALETTE_ENTRIES * 3) - 1)];
-
-        scalex(pix, src_width, src_height, screen_pixels, 2); 
-       
-    }
-    // No Scaling
-    else
-    {
-        uint32_t* spix = screen_pixels;
-    
-        // Lookup real RGB value from rgb array for backbuffer
-        for (int i = 0; i < (src_width * src_height); i++)
-            *(spix++) = rgb[*(pixels++) & ((S16_PALETTE_ENTRIES * 3) - 1)];
+    // Lookup real RGB value from rgb array for backbuffer
+    for (int i = 1; i <= (320 * 224); i++) {
+        if (i % 320 == 0) {
+            for (int j = 0; j < (192); j++) {
+                *(spix++) = 0x000000;
+            }
+        }
+        *(spix++) = rgb[*(pixels++) & ((S16_PALETTE_ENTRIES * 3) - 1)];
     }
 
     // Example: Set the pixel at 10,10 to red
     //pixels[( 10 * surface->w ) + 10] = 0xFF0000;
     // ------------------------------------------------------------------------      
-}
-
-// Fastest scaling algorithm. Scales proportionally.
-void RenderSW::scalex(uint32_t* src, const int srcwid, const int srchgt, uint32_t* dest, const int scale)
-{
-    const int destwid = srcwid * scale;
-
-    for (int y = 0; y < srchgt; y++)
-    {
-        int src_inc = 0;
-    
-        // First Row
-        for (int x = 0; x < destwid; x++)
-        {
-            *dest++ = *src;
-            if (++src_inc == scale)
-            {
-                src_inc = 0;
-                src++;
-            }
-        }
-        // Make additional copies of this row
-        for (int i = 0; i < scale-1; i++)
-        {
-            memcpy(dest, dest - destwid, destwid * sizeof(uint32_t)); 
-            dest += destwid;
-        }
-    }
 }

@@ -22,7 +22,7 @@
 // Stage Mapping Data: This is the master table that controls the order of the stages.
 //
 // You can change the stage order by editing this table.
-// Bear in mind that the double lanes are hard coded in Stage 1.
+// Bear in mind that the float lanes are hard coded in Stage 1.
 //
 // For USA there are unused tracks:
 // 0x3A = Unused Coconut Beach

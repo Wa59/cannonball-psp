@@ -16,6 +16,10 @@
 #include "globals.hpp"
 #include "frontend/config.hpp"
 
+#ifdef PSP 
+//#include "sdl/renderpsp.hpp"
+#include "sdl/rendersw.hpp"
+#else
 #ifdef WITH_OPENGL
 
 #if defined SDL2
@@ -37,11 +41,15 @@
 #else
 #include "sdl/rendersw.hpp"
 #endif //SDL2
+#endif //PSP
 
 Video video;
 
 Video::Video(void)
 {
+    #ifdef PSP 
+    renderer     = new RenderSW();
+    #else
     #ifdef WITH_OPENGL
     renderer     = new RenderGL();
     
@@ -55,6 +63,7 @@ Video::Video(void)
 
     #else
     renderer     = new RenderSW();
+    #endif
     #endif
 
     pixels       = NULL;
@@ -136,14 +145,13 @@ int Video::set_video_mode(video_settings_t* settings)
     config.s16_height = S16_HEIGHT;
 
     // Internal video buffer is doubled in hi-res mode.
+    /*
     if (settings->hires)
     {
         config.s16_width  <<= 1;
         config.s16_height <<= 1;
     }
-
-    if (settings->scanlines < 0) settings->scanlines = 0;
-    else if (settings->scanlines > 100) settings->scanlines = 100;
+    */
 
     if (settings->scale < 1)
         settings->scale = 1;
@@ -350,8 +358,9 @@ uint8_t Video::read_pal8(uint32_t palAddr)
 
 uint16_t Video::read_pal16(uint32_t palAddr)
 {
-    uint32_t adr = palAddr & 0x1fff;
-    return (palette[adr] << 8) | palette[adr+1];
+    uint32_t adr = palAddr & 0x1FFF;  // Masking to ensure address is within bounds
+    uint8_t *pal = &palette[adr];    // Direct pointer to palette entry
+    return (*pal << 8) | *(pal + 1);  // Accessing two consecutive 16-bit values
 }
 
 uint16_t Video::read_pal16(uint32_t* palAddr)

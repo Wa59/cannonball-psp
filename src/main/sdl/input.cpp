@@ -36,7 +36,7 @@
 
 #endif
 
-
+int input_buffer = 4;
 
 Input input;
 
@@ -114,6 +114,8 @@ void Input::handle_key_up(SDL_keysym* keysym)
 #ifdef PSP 
 void Input::psp_handle_key(unsigned int flag)
 {
+    input_buffer++;
+
     switch (flag) {
         case 0:
             keys[BRAKE] = true;
@@ -131,16 +133,25 @@ void Input::psp_handle_key(unsigned int flag)
             keys[LEFT] = true;
             break;
         case 5:
-            keys[START] = true;
+            if (input_buffer >= 4) {
+                keys[START] = true;
+                input_buffer = 4;
+            }
             break;
         case 6:
             keys[ACCEL] = true;
             break;
         case 7:
-            keys[MENU] = true;
+            if (input_buffer >= 4) {
+                keys[MENU] = true;
+                input_buffer = 0;
+            }
             break;
         case 8:
-            keys[COIN] = true;
+            if (input_buffer >= 4) {
+                keys[COIN] = true;
+                input_buffer = 0;
+            }
             break;
         case 9:
             keys[GEAR1] = true;
