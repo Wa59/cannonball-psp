@@ -11,11 +11,14 @@ Running
 Controls
 ---
 
-* Start: 	Start
-* Gas: 	X
-* Brake: 	[]
-* Shift:	R
-* View: 	Circle
+* Start: Start
+* Select: Coins
+* Gas: X
+* Brake: []
+* Shift: R
+* Shift2: L (must change controls in menu)
+* View: Triangle
+* Menu:  Circle
 * Turn:	Dpad
 
 Thanks
