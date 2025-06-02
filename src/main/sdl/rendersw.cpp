@@ -57,7 +57,7 @@ bool RenderSW::init(int src_width, int src_height,
         SDL_FreeSurface(surface);
 
     // Set the video mode
-    surface = SDL_SetVideoMode(320, 224, bpp, SDL_SWSURFACE | SDL_HWPALETTE | SDL_FULLSCREEN);
+    surface = SDL_SetVideoMode(404, 224, bpp, SDL_SWSURFACE | SDL_HWPALETTE | SDL_FULLSCREEN);
 
 
     // Convert the SDL pixel surface to 32 bit.
@@ -104,13 +104,19 @@ void RenderSW::draw_frame(uint16_t* pixels)
     uint32_t* spix = screen_pixels;
 
     // Lookup real RGB value from rgb array for backbuffer
-    for (int i = 1; i <= (320 * 224); i++) {
-        if (i % 320 == 0) {
-            for (int j = 0; j < (192); j++) {
+    for (int i = 1; i <= (380 * 224); i++) {
+        if (i==1) {
+            for (int j = 0; j < (40); j++) {
                 *(spix++) = 0x000000;
             }
         }
-        *(spix++) = rgb[*(pixels++) & ((S16_PALETTE_ENTRIES * 3) - 1)];
+        if (i % 321 == 0) {
+            for (int j = 0; j < (192); j++) {
+                *(spix++) = 0x000000;
+            }
+        } else {
+            *(spix++) = rgb[*(pixels++) & ((S16_PALETTE_ENTRIES * 3) - 1)];
+        }
     }
 
     // Example: Set the pixel at 10,10 to red

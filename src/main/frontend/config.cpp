@@ -81,7 +81,7 @@ void Config::load(const std::string &filename)
     video.scanlines  = pt_config.get("video.scanlines",          0); // Scanlines
     video.fps        = pt_config.get("video.fps",                0); // Default is 60 fps
     video.fps_count  = pt_config.get("video.fps_counter",        0); // FPS Counter
-    video.widescreen = pt_config.get("video.widescreen",         0); // Enable Widescreen Mode
+    video.widescreen = 0; // Enable Widescreen Mode
     video.hires      = pt_config.get("video.hires",              0); // Hi-Resolution Mode
     video.filtering  = pt_config.get("video.filtering",          0); // Open GL Filtering Mode
           
@@ -373,7 +373,7 @@ void Config::save_tiletrial_scores()
 
     try
     {
-        write_xml(engine.jap ? filename + "_jap.xml" : filename + ".xml", pt, std::locale(), xml_writer_settings('\t', 1)); // Tab space 1
+        //write_xml(engine.jap ? filename + "_jap.xml" : filename + ".xml", pt, std::locale(), xml_writer_settings('\t', 1)); // Tab space 1
     }
     catch (std::exception &e)
     {

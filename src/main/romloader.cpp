@@ -124,7 +124,7 @@ int RomLoader::load_binary(const char* filename)
         return 1; // fail
     }
 
-    length = filesize(filename);
+    length = 3 * 8 * 1024;
 
     // Read file
     char* buffer = new char[length];

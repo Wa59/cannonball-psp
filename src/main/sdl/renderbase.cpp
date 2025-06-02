@@ -6,17 +6,17 @@ RenderBase::RenderBase()
     surface       = NULL;
     screen_pixels = NULL;
 
-    orig_width  = 320;
+    orig_width  = 398;
     orig_height = 224;
 }
 
 // Setup screen size
 bool RenderBase::sdl_screen_size()
 {
-    orig_width  = 320; 
+    orig_width  = 398; 
     orig_height = 224;
 
-    scn_width  = 320;
+    scn_width  = 398;
     scn_height = 224;
 
     return true;

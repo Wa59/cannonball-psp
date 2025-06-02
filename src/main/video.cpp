@@ -43,6 +43,8 @@
 #endif //SDL2
 #endif //PSP
 
+bool draw = true;
+
 Video video;
 
 Video::Video(void)
@@ -175,15 +177,24 @@ void Video::draw_frame()
     }
     else
     {
-        // OutRun Hardware Video Emulation
-        tile_layer->update_tile_values();
+        draw=!draw;
 
-        (hwroad.*hwroad.render_background)(pixels);
-        tile_layer->render_tile_layer(pixels, 1, 0);      // background layer
-        tile_layer->render_tile_layer(pixels, 0, 0);      // foreground layer
-        (hwroad.*hwroad.render_foreground)(pixels);
-        sprite_layer->render(8);
-        tile_layer->render_text_layer(pixels, 1);
+        //if (draw)
+        //{
+            tile_layer->update_tile_values();
+
+            (hwroad.*hwroad.render_background)(pixels);
+            // OutRun Hardware Video Emulation
+            
+            tile_layer->render_tile_layer(pixels, 1, 0);      // background layer
+            tile_layer->render_tile_layer(pixels, 0, 0);      // foreground layer
+            (hwroad.*hwroad.render_foreground)(pixels);
+        
+            sprite_layer->render(8);
+
+            tile_layer->render_text_layer(pixels, 1);
+        //}
+
     }
     renderer->draw_frame(pixels);
     renderer->finalize_frame();

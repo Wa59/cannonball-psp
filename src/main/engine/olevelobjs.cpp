@@ -286,13 +286,15 @@ void OLevelObjs::setup_sprite_routine(oentry* sprite)
 void OLevelObjs::do_sprite_routine()
 {
     int n_sprites = 0;
-    for (uint8_t i = 0; i < osprites.no_sprites; i=i+3)
+    //for (uint8_t i = 0; i < osprites.no_sprites; i=i+3)
+    for (uint8_t i = 0; i < osprites.no_sprites; i=i+1)
     { 
         n_sprites++;
 
         oentry* sprite = &osprites.jump_table[i];
 
         // Force render start banner and trees
+        /*
         if (i == 0) { sprite = &osprites.jump_table[47]; }
         if (i == 3) { sprite = &osprites.jump_table[44]; }
         if (i == 6) { sprite = &osprites.jump_table[43]; }
@@ -301,6 +303,7 @@ void OLevelObjs::do_sprite_routine()
         if (i == 15) { sprite = &osprites.jump_table[22]; }
         if (i == 18) { sprite = &osprites.jump_table[46]; }
         if (i == 24) { sprite = &osprites.jump_table[20]; }
+        */
 
         if (sprite->control & OSprites::ENABLE)
         {
